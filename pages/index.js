@@ -31,7 +31,7 @@ export default function Home() {
       </Flex>
       </Flex>
 
-      <Flex background={"#171717"}  justifyItems={"center"} alignItems={"center"} flexDir={"row"} paddingTop={{base:"8px",md:"20px"}} paddingBottom={"20px"} position={"fixed"} bottom={"0"} width={"100%"}>
+      <Flex background={"#171717"}  justifyItems={"center"} alignItems={"center"} flexDir={"row"} paddingTop={{base:"8px",md:"20px"}} paddingBottom={{base:"8px",md:"20px"}} position={"fixed"} bottom={"0"} width={"100%"}>
       <Flex paddingLeft={{base:"20px",md:"140px"}} paddingRight={{base:"20px",md:"151px"}} justifyItems={"center"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}>
         <Text color={"#DE89BE"} fontSize={{base:"16px",md:"24px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"28.8px"}>Grapevine</Text>
         <Text color={"white"} fontSize={{base:"12px",md:"16px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"19px"}>Built with 💖 at cos parivaar</Text>
