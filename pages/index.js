@@ -1,5 +1,3 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import { Flex, Text, Button } from '@chakra-ui/react'
 import { ClassNames } from '@emotion/react'
 
@@ -13,7 +11,6 @@ export default function Home() {
   }
   return (
     <div className="main">
-
     <Flex flexDir={"column"} justifyItems={"center"} alignItems={"center"} justifyContent={"center"} height={"100vh"} color={"white"}>
       <Flex width={{base:"320px",md:"713px"}} justifyItems={"center"} alignItems={"center"} flexDir={"column"}>
       <Text fontSize={{base:"32px",md:"48px"}} align={"center"} fontFamily={"Syne, sans-serif"} fontWeight={"700"} size={"56px"} lineHeight={{base:"38.4px",md:"67.2px"}} width={{base:"320px",md:"600px"}}>Give anonymous reviews on Grapevine</Text>
