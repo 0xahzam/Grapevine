@@ -1,12 +1,12 @@
-import { Flex, Text, Button, Input, InputGroup, InputLeftElement, Image } from '@chakra-ui/react'
+import { Flex, Text, Button, Input, Image } from '@chakra-ui/react'
 
 const mainapp = () => {
   return (
     <div className='main'>
     <Flex flexDir={"column"} align={"center"}> 
 
-    <Flex top={"0"} width={"100%"} background={"#17181C"}  justifyItems={"center"} alignItems={"center"} flexDir={"row"} paddingTop={{base:"12px",md:"28px"}} paddingBottom={{base:"12px",md:"28px"}}>
-    <Flex paddingLeft={{base:"20px",md:"140px"}} paddingRight={{base:"20px",md:"151px"}} justifyItems={"center"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}>
+    <Flex top={"0"} width={"100%"} background={"#17181C"}  justifyitems={"center"} alignItems={"center"} flexDir={"row"} paddingTop={{base:"12px",md:"28px"}} paddingBottom={{base:"12px",md:"28px"}}>
+    <Flex paddingLeft={{base:"20px",md:"140px"}} paddingRight={{base:"20px",md:"151px"}} justifyitems={"center"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}>
         <Text color={"#DE47A5"} fontSize={{base:"24px",md:"32px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"38px"}>Grapevine</Text>
         <Text color={"white"} fontSize={{base:"13px",md:"16px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"19px"}>read memo</Text>
     </Flex>
@@ -20,7 +20,7 @@ const mainapp = () => {
         You will be known as 
         <span style={{color:"#DE47A5"}} > anon#8008 </span> 
         here <br/>
-        (🤫 don't tell anyone)
+        (🤫 don&apos;t tell anyone)
         </Text>
 
         <Text paddingTop={"30px"} fontSize={"18px"} fontFamily={"DM Sans, sans-serif"}>
@@ -34,14 +34,14 @@ const mainapp = () => {
         </Text>
     </Flex>
 
-    <Flex width={{base:"320px",md:"533px"}} JustifyItems={"center"} flexDir={"column"} marginTop={"32px"}>
+    <Flex width={{base:"320px",md:"533px"}} justifyitems={"center"} flexDir={"column"} marginTop={"32px"}>
     <Text fontFamily={"Syne, sans-serif"} fontWeight={"700"} fontSize={"20px"} lineHeight={"24px"}>
       Top Profiles
     </Text>
 
     <Flex marginTop={"24px"} gap={"8px"} flexDir={"column"}>
     <Flex background={"#17181C"} height={"64px"} borderRadius={"12px"} align={"center"} >
-        <Image src='chris.png' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
+        <Image src='chris.png' alt='chris evans' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
         <Text paddingLeft={"12px"}  fontFamily={"DM Sans, sans-serif"} fontWeight={"700"} fontSize={"16px"}>
           @somedude
 
@@ -49,7 +49,7 @@ const mainapp = () => {
     </Flex>
 
     <Flex background={"#17181C"} height={"64px"} borderRadius={"12px"} align={"center"} >
-        <Image src='chris.png' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
+        <Image src='chris.png' alt='chris evans' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
         <Text paddingLeft={"12px"}  fontFamily={"DM Sans, sans-serif"} fontWeight={"700"} fontSize={"16px"}>
           @somedude
 
@@ -57,7 +57,7 @@ const mainapp = () => {
     </Flex>
 
     <Flex background={"#17181C"} height={"64px"} borderRadius={"12px"} align={"center"} >
-        <Image src='chris.png' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
+        <Image src='chris.png' alt='chris evans' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
         <Text paddingLeft={"12px"}  fontFamily={"DM Sans, sans-serif"} fontWeight={"700"} fontSize={"16px"}>
           @somedude
 
@@ -65,7 +65,7 @@ const mainapp = () => {
     </Flex>
 
     <Flex background={"#17181C"} height={"64px"} borderRadius={"12px"} align={"center"} >
-        <Image src='chris.png' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
+        <Image src='chris.png' alt='chris evans' height={"60px"} paddingLeft={"12px"} paddingTop={"8px"} paddingBottom={"8px"}/>
         <Text paddingLeft={"12px"}  fontFamily={"DM Sans, sans-serif"} fontWeight={"700"} fontSize={"16px"}>
           @somedude
 
