@@ -1,4 +1,4 @@
-import { Flex, Text, Button, Input, Image, InputGroup, InputLeftAddon, InputLeftElement } from '@chakra-ui/react'
+import { Flex, Text, Button, Input, Image, InputGroup, InputLeftElement } from '@chakra-ui/react'
 
 const mainapp = () => {
   return (
@@ -28,7 +28,9 @@ const mainapp = () => {
         </Text>
 
         <InputGroup  marginTop={"16px"} width={"480px"} height={"45px"} borderRadius={"12px"}>
-        <InputLeftElement children='🔎' background={"None"}/>
+        <InputLeftElement pointerEvents='none'>
+          🔎
+        </InputLeftElement>
         <Input placeholder = "Search users by their twitter handle" />
         </InputGroup>
 
