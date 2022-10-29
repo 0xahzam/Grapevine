@@ -1,4 +1,4 @@
-import { Flex, Text, Button, Input, Image } from '@chakra-ui/react'
+import { Flex, Text, Button, Input, Image, InputGroup, InputLeftAddon, InputLeftElement } from '@chakra-ui/react'
 
 const mainapp = () => {
   return (
@@ -27,7 +27,10 @@ const mainapp = () => {
         To get started, drop a tea on anyone from Twitter   
         </Text>
 
-        <Input marginTop={"16px"} width={"480px"} height={"45px"} borderRadius={"12px"} placeholder = "Search users by their twitter handle" />
+        <InputGroup  marginTop={"16px"} width={"480px"} height={"45px"} borderRadius={"12px"}>
+        <InputLeftElement children='🔎' background={"None"}/>
+        <Input placeholder = "Search users by their twitter handle" />
+        </InputGroup>
 
         <Text paddingTop={"12px"} fontSize={"14px"} color={"FFFFFF"} opacity={"45%"} fontFamily={"DM Sans, sans-serif"}>
         Your reviews will go by your anon handle.
