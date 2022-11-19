@@ -8,14 +8,14 @@ const mainapp = () => {
     <Flex top={"0"} width={"100%"} background={"#17181C"}  justifyitems={"center"} alignItems={"center"} flexDir={"row"} paddingTop={{base:"12px",md:"28px"}} paddingBottom={{base:"12px",md:"28px"}}>
     <Flex paddingLeft={{base:"20px",md:"140px"}} paddingRight={{base:"20px",md:"151px"}} justifyitems={"center"} alignItems={"center"} justifyContent={"space-between"} width={"100%"}>
         <Text color={"#DE47A5"} fontSize={{base:"24px",md:"32px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"38px"}>Grapevine</Text>
-        <Text color={"white"} fontSize={{base:"13px",md:"16px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"19px"}>read memo</Text>
+        <Text color={"white"} fontSize={{base:"13px",md:"16px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"} lineHeight={"19px"}>Profile</Text>
     </Flex>
 
     </Flex>
 
-    <Flex flexDir={"column"} color={"white"}  marginTop={"131px"} marginBottom={"131px"}>
-    <Flex width={{base:"320px",md:"533px"}}  alignItems={"center"} flexDir={"column"}>
-        <Text fontSize={{base:"24px",md:"24px"}} align={"center"} fontFamily={"Syne, sans-serif"} fontWeight={"700"} size={"56px"} lineHeight={{base:"38px",md:"38px"}} width={{base:"320px",md:"540px"}}>
+    <Flex flexDir={"column"} color={"white"}  marginTop={{base:"67px",md:"131px"}} marginBottom={"131px"}>
+    <Flex width={{base:"328px",md:"533px"}}  alignItems={"center"} flexDir={"column"}>
+        <Text fontSize={{base:"24px",md:"24px"}} align={"center"} fontFamily={"Syne, sans-serif"} fontWeight={"700"} size={"56px"} lineHeight={{base:"36px",md:"38px"}} width={{base:"320px",md:"540px"}}>
         Hello bionic! Welcome to grapevine. <br/>
         You will be known as 
         <span style={{color:"#DE47A5"}} > anon#8008 </span> 
@@ -23,11 +23,11 @@ const mainapp = () => {
         (🤫 don&apos;t tell anyone)
         </Text>
 
-        <Text paddingTop={"30px"} fontSize={"18px"} fontFamily={"DM Sans, sans-serif"}>
+        <Text paddingTop={"30px"} fontSize={"18px"} textAlign={"center"} fontFamily={"DM Sans, sans-serif"}>
         To get started, drop a tea on anyone from Twitter   
         </Text>
 
-        <InputGroup  marginTop={"16px"} width={"480px"} height={"45px"} borderRadius={"12px"}>
+        <InputGroup width={{base:"328px",md:"480px"}} marginTop={"16px"} height={"45px"} borderRadius={"12px"}>
         <InputLeftElement pointerEvents='none'>
           🔎
         </InputLeftElement>
