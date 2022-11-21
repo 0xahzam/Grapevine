@@ -1,4 +1,4 @@
-import { Flex, Text, Button, Input, Image, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Flex, Text, Button, Input, Image, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react'
 
 const mainapp = () => {
   return (
@@ -18,7 +18,7 @@ const mainapp = () => {
     <Image marginTop={"24px"} src={"cryptocunt.png"} alt={"cryptocunt"} height={"140px"} width={"140px"} border={"8px solid black"} borderRadius={"24px"}/>
     <Text marginTop={"32px"} fontSize={{base:"24px",md:"32px"}} fontFamily={"Syne, sans-serif"} fontWeight={"700"}>@cryptocunt</Text>
     <Text marginTop={"8px"} fontFamily={"Urbanist, sans-serif"} fontSize={{base:"16px",md:"18px"}} fontWeight={"400"}>Just your friendly neighbourhood anon</Text>
-    <Input borderRadius={"12px"} marginTop={"32px"} border={"none"}  height={"220px"} placeholder = "Write your review here..." background={"#2C2E36"}></Input>
+    <Textarea borderRadius={"12px"} marginTop={"32px"} border={"none"}  height={"220px"} placeholder = "Write your review here..." background={"#2C2E36"}></Textarea>
     <Flex justify={"center"}>
     <Button marginTop={{base:"24px",md:"23px"}} background={"#DE47A5"} color={"black"} fontFamily={"Syne, sans-serif"} boxShadow={"3px 3px white"} border={"1px solid black"} lineHeight={"19.2px"} paddingRight={"32px"} paddingLeft={"32px"} paddingTop={"16px"} paddingBottom={"16px"} fontSize={"16px"} fontWeight={"bold"} width={{base:"197px",md:"248px"}} height={"51px"} borderRadius={"12px"} _hover={{background: "#C297B8"}}>Publish Review</Button>
     </Flex>
