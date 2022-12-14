@@ -1,37 +1,66 @@
 import { Flex, Text, Button } from "@chakra-ui/react";
-import { ClassNames } from "@emotion/react";
-import { nanoid } from "nanoid";
-import { LSPrefix, scopesForAuthorization } from "../constants/index";
-import { encryptCodeVerifier } from "../utils/encryptCodeVerifier";
-import { generateAuthorizationURL } from "../utils/twitter/generateAuthorizationURL";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { auth, twitter, app, firebase, db } from "../firebase/clientApp";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { runTransaction } from "firebase/firestore";
 
 export default function Home() {
-  const clientID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID;
-  const encryptionMethod = process.env.NEXT_PUBLIC_ENCRYPTION_METHOD;
-  const redirectURI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+  const [user, loading, error] = useAuthState(auth);
+  const router = useRouter();
+  const login = async (provider) => {
+    if (user) {
+      router.push("/feed");
+      return;
+    } else {
+      const result = await signInWithPopup(auth, provider);
 
-  const onClickHandler = async () => {
-    console.log(clientID, redirectURI, encryptionMethod, 333);
-    if (!clientID || !redirectURI || !encryptionMethod) return;
-    const tempState = nanoid();
-    const tempCodeV = nanoid();
-    localStorage && localStorage.setItem(`${LSPrefix}_temp_codev`, tempCodeV);
-    localStorage && localStorage.setItem(`${LSPrefix}_temp_state`, tempState);
-    console.log(clientID, redirectURI, encryptionMethod, 333);
-    // twitter authorization url
-    const url = generateAuthorizationURL(
-      clientID,
-      redirectURI,
-      tempState,
-      scopesForAuthorization,
-      encryptCodeVerifier(tempCodeV),
-      encryptionMethod
-    );
+      const userDoc = doc(db, "users", result.user.providerData[0].uid);
+      const userInDoc = await getDoc(userDoc, result.user.providerData[0].uid);
 
-    console.log(url, "url");
-    // open url in new tab
-    window.open(url, "_blank");
+      if (userInDoc.exists()) {
+        console.log("Document data:", userInDoc.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const idRef = doc(db, "users", "--idCount--");
+            const idDoc = await transaction.get(idRef);
+            console.log(idDoc, "12", idDoc.data());
+            if (!idDoc.exists()) {
+              throw "Document does not exist!";
+            }
+
+            const newId = idDoc.data().idCount + 1;
+            transaction.update(idRef, { idCount: newId });
+            transaction.set(userDoc, {
+              anonId: newId,
+              name: result.user.displayName,
+              email: result.user.providerData[0].email,
+              photoURL: result.user.providerData[0].photoURL,
+              twitterID: result.user.providerData[0].uid,
+            });
+          });
+          console.log("Transaction successfully committed!");
+        } catch (e) {
+          console.log("Transaction failed: ", e);
+        }
+      }
+      router.push("/feed");
+      console.log(result, 23);
+    }
   };
+  const logout = async () => {
+    const result = await signOut(auth);
+    console.log(result);
+  };
+
+  console.log(user, loading, error);
+
   const breakpoints = {
     sm: "30em",
     md: "48em",
@@ -86,6 +115,16 @@ export default function Home() {
             >
               read memo
             </Text>
+            <Text
+              color={"white"}
+              fontSize={{ base: "13px", md: "16px" }}
+              fontFamily={"Syne, sans-serif"}
+              fontWeight={"700"}
+              lineHeight={"19px"}
+              onClick={logout}
+            >
+              logout
+            </Text>
           </Flex>
         </Flex>
 
@@ -138,7 +177,7 @@ export default function Home() {
               height={"51px"}
               borderRadius={"12px"}
               _hover={{ background: "#C297B8" }}
-              onClick={onClickHandler}
+              onClick={() => login(twitter)}
             >
               Connect with twitter
             </Button>

@@ -6,200 +6,16 @@ import {
   Image,
   InputGroup,
   InputLeftElement,
+  useToast,
 } from "@chakra-ui/react";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { getTokenFromCode } from "../utils/getTokenFromCode";
 import Router, { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-import { LSPrefix } from "../constants";
-
 const mainapp = () => {
   const { query, push: redirect, isReady } = useRouter();
-
-  const [token, setToken] = useState();
-  const removeLSData = async () => {
-    localStorage.removeItem(`${LSPrefix}_temp_codev`);
-    localStorage.removeItem(`${LSPrefix}_temp_state`);
-    Cookies.remove("token");
-    Router.push("/");
-  };
-
-  // const initFlags = {
-  //   search: "",
-  //   userSearch: { id: "", username: "" },
-  //   dateFrom: "",
-  //   dateTo: "",
-  //   deletedTweets: [],
-  //   sort: "latest", //oldest
-  // };
-  // const [flags, setFlags] = useState({ ...initFlags });
-  const bookmarkQuery = {
-    "tweet.fields":
-      "created_at,author_id,id,conversation_id,attachments,entities",
-    expansions: "author_id,attachments.media_keys",
-    "user.fields": "created_at,profile_image_url,name,username",
-    "media.fields": "height,type,url,preview_image_url",
-    // max_results: 100,
-  };
-  // const [deleteLoader, setDeleteLoader] = useState(false);
-  // localStorage.setItem("chakra-ui-color-mode", "dark");
-
-  // console.log(data);
-  const fetchBookmarks = async (accessToken) => {
-    try {
-      const resData = await axios.post("/api/twitter/bookmarks", {
-        token: accessToken,
-        query: Object.keys(bookmarkQuery)
-          .map((key) => key + "=" + bookmarkQuery[key])
-          .join("&"),
-      });
-      const res = resData.data;
-
-      if (!res?.success) return;
-
-      let bookmarks = res.data.bookmarks;
-      let users = res.data.users;
-
-      users = users.map((e) => {
-        return {
-          ...e,
-          count: bookmarks.filter((f) => f.author_id == e.id).length,
-        };
-      });
-      setData({ bookmarks, media: res.data.media, users, user: res.data.user });
-      setPagination(res.data["next-token"]);
-    } catch (err) {
-      console.error(err?.response?.data);
-    }
-  };
-  const cookie = Cookies.get("token");
-  useLayoutEffect(() => {
-    if (!isReady) return;
-    console.log(Cookies.get("token"), query, 55);
-
-    if (Cookies.get("token")) {
-      const token = JSON.parse(Cookies.get("token"));
-      const { accessToken, refreshToken, expiresAt } = token;
-      console.log("token in cookies", token);
-      console.log(expiresAt < new Date().getTime());
-      if (expiresAt < new Date().getTime()) {
-        console.log("token is expired");
-
-        try {
-          const fetch = async () => {
-            const accessTokenRes = await getTokenFromCode(
-              "",
-              "",
-              token.refreshToken
-            );
-            console.log(accessTokenRes, "ressssss");
-            if (!accessTokenRes?.success) {
-              console.log(1);
-              return;
-            }
-
-            const { accessToken, refreshToken } = accessTokenRes;
-            if (!accessToken) {
-              console.log(1);
-              return;
-            }
-            Cookies.set(
-              "token",
-              JSON.stringify({
-                accessToken,
-                refreshToken,
-                expiresAt: new Date().getTime() + 120 * 60 * 1000,
-              })
-            );
-            setToken(accessToken);
-          };
-          fetch();
-        } catch (err) {
-          console.error(err);
-        }
-      } else {
-        console.log("fetching bookmark with current token");
-        //fetchBookmarks(accessToken);
-      }
-    } else {
-      if (query.code) {
-        const tempState = query.state || "";
-        const lsTempState =
-          localStorage && localStorage.getItem(`${LSPrefix}_temp_state`);
-        const codeV = localStorage.getItem(`${LSPrefix}_temp_codev`);
-        const authCode = query?.code || "";
-
-        if (!codeV || !authCode || !lsTempState || tempState !== lsTempState) {
-          console.log(
-            1,
-            "codev",
-            codeV,
-            "authcode",
-            authCode,
-            "lstemp",
-            lsTempState,
-            "temp",
-            tempState
-          );
-          return;
-        }
-        try {
-          const fetch = async () => {
-            const accessTokenRes = await getTokenFromCode(
-              authCode,
-              codeV,
-              undefined
-            );
-            console.log(accessTokenRes, "ressssss");
-            if (!accessTokenRes?.success) {
-              console.log(1);
-              return;
-            }
-
-            const { accessToken, refreshToken } = accessTokenRes;
-            if (!accessToken) {
-              console.log(1);
-              return;
-            }
-            Cookies.set(
-              "token",
-              JSON.stringify({
-                accessToken,
-                refreshToken,
-                expiresAt: new Date().getTime() + 120 * 60 * 1000,
-              })
-            );
-            fetchBookmarks(accessToken);
-          };
-          fetch();
-
-          // if (!Cookies.get("token")) {
-          //   alert("cookie not there. Go login again");
-          // }
-          //fetchBookmarks(accessToken);
-        } catch (err) {
-          console.error(err);
-        }
-        // make a req to get new token with the auth code
-        // save the new token and ref token in state and cookies
-        // }
-      } else {
-        console.log(query.code, 45);
-        toast({
-          title: `No token available`,
-          status: "warning",
-          isClosable: true,
-          position: "top",
-          duration: 3000,
-          //variant: "left-accent",
-        });
-        Router.push("/");
-        console.log("noo cookie , noo query , going for auth1");
-      }
-    }
-  }, [query, cookie, token, isReady]);
+  const toast = useToast();
 
   return (
     <div className="main">
@@ -237,7 +53,6 @@ const mainapp = () => {
               fontFamily={"Syne, sans-serif"}
               fontWeight={"700"}
               lineHeight={"19px"}
-              onClick={removeLSData}
             >
               Logout
             </Text>
