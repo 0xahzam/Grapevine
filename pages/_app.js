@@ -1,15 +1,18 @@
-import '../styles/globals.css'
-import Topbar from './Topbar'
+import "../styles/globals.css";
+import Topbar from "./Topbar";
 // pages/_app.js
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from "@chakra-ui/react";
+import { ContextWrapper } from "../context/context";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
-      {/* <Topbar/> */}
-      <Component {...pageProps} />
-    </ChakraProvider>
-  )
+    <ContextWrapper>
+      <ChakraProvider>
+        {/* <Topbar/> */}
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </ContextWrapper>
+  );
 }
 
-export default MyApp
+export default MyApp;

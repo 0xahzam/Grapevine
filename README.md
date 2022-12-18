@@ -37,3 +37,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 // api key secret : r8XFBdpeC1hOsNDnXZivTqnflPZsgXmRAdFwg55RvTupny9rK9
 // bearer token : AAAAAAAAAAAAAAAAAAAAAN31kAEAAAAA1cA53VG%2FPJe%2FoI6Li99t9WXZgCI%3DxdGTmHtffOfYJhINsn0mzzmzdj5zrXXoRHCsp57z5rJiKurvUb
 // client secret : nmMBD_8tsYwtTI0nxf1xAHuM82yZwsWMI41Prwc6fn43YbKsGu
+
+
+TODO 
+
+//handle error if user not in context ('/feed')

@@ -6,22 +6,41 @@ import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { runTransaction } from "firebase/firestore";
+import { useUserContext } from "../context/context";
 
 export default function Home() {
   const [user, loading, error] = useAuthState(auth);
+  const { contextUser, setContextUser } = useUserContext();
+
   const router = useRouter();
   const login = async (provider) => {
     if (user) {
-      router.push("/feed");
+      // following should happen if context is null
+      console.log("user in auth user");
+      const userDoc = doc(db, "users", user.providerData[0].uid);
+      const userInDoc = await getDoc(userDoc, user.providerData[0].uid);
+      if (userInDoc.exists()) {
+        console.log("Document data:", userInDoc.data());
+        setContextUser(userInDoc.data());
+        router.push("/feed");
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        const result = await signOut(auth);
+        //error toast
+        //logout
+      }
+
       return;
     } else {
       const result = await signInWithPopup(auth, provider);
-
+      console.log(result, "result");
       const userDoc = doc(db, "users", result.user.providerData[0].uid);
       const userInDoc = await getDoc(userDoc, result.user.providerData[0].uid);
 
       if (userInDoc.exists()) {
         console.log("Document data:", userInDoc.data());
+        setContextUser(userInDoc.data());
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -37,13 +56,23 @@ export default function Home() {
 
             const newId = idDoc.data().idCount + 1;
             transaction.update(idRef, { idCount: newId });
-            transaction.set(userDoc, {
+            setContextUser({
               anonId: newId,
               name: result.user.displayName,
               email: result.user.providerData[0].email,
               photoURL: result.user.providerData[0].photoURL,
               twitterID: result.user.providerData[0].uid,
+              username: result._tokenResponse.screenName,
             });
+            const e = transaction.set(userDoc, {
+              anonId: newId,
+              name: result.user.displayName,
+              email: result.user.providerData[0].email,
+              photoURL: result.user.providerData[0].photoURL,
+              twitterID: result.user.providerData[0].uid,
+              username: result._tokenResponse.screenName,
+            });
+            console.log(e, "Transaction successfully committed!");
           });
           console.log("Transaction successfully committed!");
         } catch (e) {
@@ -51,7 +80,7 @@ export default function Home() {
         }
       }
       router.push("/feed");
-      console.log(result, 23);
+      console.log(contextUser, 23);
     }
   };
   const logout = async () => {
