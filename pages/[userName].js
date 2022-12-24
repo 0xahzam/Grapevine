@@ -218,7 +218,10 @@ const Profile = () => {
   }, []);
   console.log(contextReviews);
   const currentUser = contextAllUsers.find((e) => e.username == userName);
-  console.log(contextAllUsers, currentUser);
+  const currentUserReviews = contextReviews.filter(
+    (e) => e.reviewFor == currentUser.twitterID
+  );
+  console.log(contextAllUsers, currentUser, currentUserReviews, 149);
 
   return (
     <div className="main">
@@ -294,7 +297,7 @@ const Profile = () => {
                       fontFamily={"Syne, sans-serif"}
                       fontWeight={"700"}
                     >
-                      ☕ {contextReviews.length}
+                      ☕ {currentUserReviews?.length}
                     </Text>
                   </Button>
 
@@ -370,7 +373,7 @@ const Profile = () => {
             </Flex>
           </Flex>
           {/* check for key id */}
-          {contextReviews?.map((review) => {
+          {currentUserReviews?.map((review) => {
             const upvoteFunc = (reviewId, currentUserId) => {
               if (review.upvotes.some((e) => e == currentUserId)) {
                 //removing upvote
@@ -515,9 +518,11 @@ const Profile = () => {
                       height={"48px"}
                       width={"213.33px"}
                       _hover={{ background: "#24252B", color: "white" }}
-                      onClick={() =>
-                        upvoteFunc(review.id, currentUser.twitterID)
-                      }
+                      onClick={() => {
+                        user
+                          ? upvoteFunc(review.id, currentUser.twitterID)
+                          : onOpenLogin;
+                      }}
                     >
                       <Text
                         textAlign={"center"}
@@ -532,7 +537,7 @@ const Profile = () => {
                             : "50%"
                         }
                       >
-                        ⬆️{" "}{review?.upvotes?.length}
+                        ⬆️ {review?.upvotes?.length}
                       </Text>
                     </Button>
 
@@ -541,9 +546,11 @@ const Profile = () => {
                       height={"48px"}
                       width={"213.33px"}
                       _hover={{ background: "#24252B", color: "white" }}
-                      onClick={() =>
-                        downvoteFunc(review.id, currentUser.twitterID)
-                      }
+                      onClick={() => {
+                        user
+                          ? downvoteFunc(review.id, currentUser.twitterID)
+                          : onOpenLogin;
+                      }}
                     >
                       <Text
                         fontSize={{ base: "20px", md: "20px" }}
@@ -557,7 +564,7 @@ const Profile = () => {
                             : "50%"
                         }
                       >
-                        ⬇️ {" "}{review?.downvotes?.length}
+                        ⬇️ {review?.downvotes?.length}
                       </Text>
                     </Button>
                   </ButtonGroup>
