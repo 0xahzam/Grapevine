@@ -53,8 +53,8 @@ const Mainapp = () => {
       SetUsersInContext(setContextAllUsers);
     }
     if (contextUser == null && user) {
-      console.log('text')
-      SetUserInContext(setContextUser, user , 'feed');
+      console.log("text");
+      SetUserInContext(setContextUser, user, "feed");
     }
   });
   return (
@@ -164,7 +164,7 @@ const Mainapp = () => {
               >
                 {console.log(contextAllUsers, "allusers")}
                 {contextAllUsers?.map((twitterUser, cid) => (
-                  <Link href={`/${twitterUser?.username}`}>
+                  <Link key={cid} href={`/${twitterUser?.username}`}>
                     <AutoCompleteItem
                       key={`option-${cid}`}
                       value={twitterUser.name}
@@ -217,9 +217,9 @@ const Mainapp = () => {
             </Text>
 
             <Flex marginTop={"24px"} gap={"8px"} flexDir={"column"}>
-              {contextAllUsers.slice(0, 5).map((userr) => {
+              {contextAllUsers.slice(0, 5).map((userr, cid) => {
                 return (
-                  <Link href={`/${userr?.username}`}>
+                  <Link key={cid} href={`/${userr?.username}`}>
                     <Flex
                       key={userr.anonId}
                       background={"#17181C"}
