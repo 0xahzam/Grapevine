@@ -1,4 +1,14 @@
-import { Flex, Text, Button, Toast, useToast } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Button,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useToast,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { auth, twitter } from "../firebase/clientApp";
@@ -68,25 +78,62 @@ export default function Home() {
             >
               read memo
             </Text>
-            <Text
-              color={"white"}
-              fontSize={{ base: "13px", md: "16px" }}
-              fontFamily={"Syne, sans-serif"}
-              fontWeight={"700"}
-              lineHeight={"19px"}
-              onClick={() =>
-                logout(() => {
-                  toast({
-                    title: `Logged out successfully!`,
-                    status: "info",
-                    isClosable: true,
-                    duration: 2000,
-                  });
-                })
-              }
-            >
-              logout
-            </Text>
+            {contextUser && user && (
+              <Menu isLazy>
+                <MenuButton>
+                  <Flex
+                    key={contextUser.anonId}
+                    background={"#17181C"}
+                    height={"64px"}
+                    borderRadius={"12px"}
+                    align={"center"}
+                  >
+                    <Image
+                      maxW={"40px"}
+                      src={contextUser?.photoURL.replace("normal", "400x400")}
+                      alt={contextUser?.name}
+                      borderRadius={"50%"}
+                      marginLeft={"12px"}
+                      marginTop={"8px"}
+                      marginBottom={"8px"}
+                    />
+                    <Text
+                      paddingLeft={"12px"}
+                      color={"white"}
+                      fontFamily={"DM Sans, sans-serif"}
+                      fontWeight={"700"}
+                      fontSize={"16px"}
+                    >
+                      @{contextUser.name}
+                    </Text>
+                  </Flex>
+                </MenuButton>
+                <MenuList>
+                  {/* MenuItems are not rendered unless Menu is open */}
+                  <MenuItem>
+                    <Text
+                      onClick={() =>
+                        logout(() => {
+                          toast({
+                            title: `Logged out successfully!`,
+                            status: "info",
+                            isClosable: true,
+                            duration: 2000,
+                          });
+                        })
+                      }
+                      color={"white"}
+                      fontSize={{ base: "13px", md: "16px" }}
+                      fontFamily={"Syne, sans-serif"}
+                      fontWeight={"700"}
+                      lineHeight={"19px"}
+                    >
+                      Logout
+                    </Text>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            )}
           </Flex>
         </Flex>
 

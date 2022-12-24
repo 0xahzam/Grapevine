@@ -163,14 +163,13 @@ const Navbar = () => {
                 align={"center"}
               >
                 <Image
-                  src={contextUser.photoURL.replace("normal", "400x400")}
-                  alt={contextUser.name}
-                  height={"60px"}
-                  width={"60px"}
+                  maxW={"40px"}
+                  src={contextUser?.photoURL.replace("normal", "400x400")}
+                  alt={contextUser?.name}
                   borderRadius={"50%"}
-                  paddingLeft={"12px"}
-                  paddingTop={"8px"}
-                  paddingBottom={"8px"}
+                  marginLeft={"12px"}
+                  marginTop={"8px"}
+                  marginBottom={"8px"}
                 />
                 <Text
                   paddingLeft={"12px"}
