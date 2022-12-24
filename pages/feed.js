@@ -17,6 +17,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import { useLayoutEffect, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
+
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useUserContext } from "../context/context";
@@ -31,8 +32,13 @@ import {
   where,
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import Link from "next/link";
+import {
+  SetUserInContext,
+  SetUsersInContext,
+} from "../context/contextFunctions";
 
-const mainapp = () => {
+const Mainapp = () => {
   const router = useRouter();
   const toast = useToast();
 
@@ -43,40 +49,12 @@ const mainapp = () => {
     useUserContext();
 
   useEffect(() => {
-    if (contextAllUsers.length == 0 && user) {
-      (async () => {
-        console.log("user in auth user", user.providerData[0].uid);
-        const q = query(
-          collection(db, "users"),
-
-          where("twitterID", "!=", user.providerData[0].uid)
-        );
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot, "querySnapshot");
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-          setContextAllUsers([...contextAllUsers, doc.data()]);
-        });
-      })();
+    if (contextAllUsers.length == 0) {
+      SetUsersInContext(setContextAllUsers);
     }
     if (contextUser == null && user) {
-      (async () => {
-        console.log("user in auth user");
-        const userDoc = doc(db, "users", user.providerData[0].uid);
-        const userInDoc = await getDoc(userDoc, user.providerData[0].uid);
-        if (userInDoc.exists()) {
-          console.log("Document data:", userInDoc.data());
-          setContextUser(userInDoc.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-          const result = await signOut(auth);
-          router.push("/");
-          //error toast
-          //logout
-        }
-      })();
+      console.log('text')
+      SetUserInContext(setContextUser, user , 'feed');
     }
   });
   return (
@@ -150,7 +128,7 @@ const mainapp = () => {
               lineHeight={{ base: "36px", md: "38px" }}
               width={{ base: "320px", md: "540px" }}
             >
-              Hello @{contextUser?.username}! Welcome to grapevine. <br />
+              Hello {contextUser?.name}! Welcome to grapevine. <br />
               You will be known as
               <span style={{ color: "#DE47A5" }}>
                 {" "}
@@ -184,27 +162,30 @@ const mainapp = () => {
                 border={"1px solid white"}
                 marginInline={"auto"}
               >
+                {console.log(contextAllUsers, "allusers")}
                 {contextAllUsers?.map((twitterUser, cid) => (
-                  <AutoCompleteItem
-                    key={`option-${cid}`}
-                    value={twitterUser.name}
-                    textTransform="capitalize"
-                  >
-                    <Avatar
-                      borderRadius={"50%"}
-                      loading="lazy"
-                      w="30px"
-                      h="30px"
-                      name={twitterUser.name}
-                      src={twitterUser.photoURL}
-                    />
-
-                    <Flex flexDir="column" justifyContent={"center"}>
-                      <Text ml="4" noOfLines={1}>
-                        @{twitterUser.username}
-                      </Text>
-                    </Flex>
-                  </AutoCompleteItem>
+                  <Link href={`/${twitterUser?.username}`}>
+                    <AutoCompleteItem
+                      key={`option-${cid}`}
+                      value={twitterUser.name}
+                      textTransform="capitalize"
+                    >
+                      {" "}
+                      <Avatar
+                        borderRadius={"50%"}
+                        loading="lazy"
+                        w="30px"
+                        h="30px"
+                        name={twitterUser.name}
+                        src={twitterUser.photoURL}
+                      />
+                      <Flex flexDir="column" justifyContent={"center"}>
+                        <Text ml="4" noOfLines={1}>
+                          @{twitterUser.username}
+                        </Text>
+                      </Flex>
+                    </AutoCompleteItem>
+                  </Link>
                 ))}
               </AutoCompleteList>
             </AutoComplete>
@@ -238,31 +219,34 @@ const mainapp = () => {
             <Flex marginTop={"24px"} gap={"8px"} flexDir={"column"}>
               {contextAllUsers.slice(0, 5).map((userr) => {
                 return (
-                  <Flex
-                    background={"#17181C"}
-                    height={"64px"}
-                    borderRadius={"12px"}
-                    align={"center"}
-                  >
-                    <Image
-                      src={userr.photoURL}
-                      alt={userr.name}
-                      height={"60px"}
-                      width={"60px"}
-                      borderRadius={"50%"}
-                      paddingLeft={"12px"}
-                      paddingTop={"8px"}
-                      paddingBottom={"8px"}
-                    />
-                    <Text
-                      paddingLeft={"12px"}
-                      fontFamily={"DM Sans, sans-serif"}
-                      fontWeight={"700"}
-                      fontSize={"16px"}
+                  <Link href={`/${userr?.username}`}>
+                    <Flex
+                      key={userr.anonId}
+                      background={"#17181C"}
+                      height={"64px"}
+                      borderRadius={"12px"}
+                      align={"center"}
                     >
-                      @{userr.name}
-                    </Text>
-                  </Flex>
+                      <Image
+                        src={userr.photoURL}
+                        alt={userr.name}
+                        height={"60px"}
+                        width={"60px"}
+                        borderRadius={"50%"}
+                        paddingLeft={"12px"}
+                        paddingTop={"8px"}
+                        paddingBottom={"8px"}
+                      />
+                      <Text
+                        paddingLeft={"12px"}
+                        fontFamily={"DM Sans, sans-serif"}
+                        fontWeight={"700"}
+                        fontSize={"16px"}
+                      >
+                        @{userr.name}
+                      </Text>
+                    </Flex>
+                  </Link>
                 );
               })}
             </Flex>
@@ -273,4 +257,4 @@ const mainapp = () => {
   );
 };
 
-export default mainapp;
+export default Mainapp;
