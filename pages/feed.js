@@ -1,8 +1,6 @@
 import {
   Flex,
   Text,
-  Button,
-  Input,
   Image,
   InputGroup,
   InputLeftElement,
@@ -15,23 +13,12 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
-import { useLayoutEffect, useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-import Cookies from "js-cookie";
-import axios from "axios";
 import { useUserContext } from "../context/context";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase/clientApp";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { signOut } from "firebase/auth";
+import { auth } from "../firebase/clientApp";
 import Link from "next/link";
 import {
   SetUserInContext,
