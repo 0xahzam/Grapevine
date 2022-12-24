@@ -1,4 +1,4 @@
-import { Flex, Text, Button } from "@chakra-ui/react";
+import { Flex, Text, Button, Toast, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { auth, twitter } from "../firebase/clientApp";
@@ -11,7 +11,7 @@ export default function Home() {
   const { contextUser, setContextUser } = useUserContext();
 
   const router = useRouter();
-
+  const toast = useToast();
   console.log(user, loading, error);
 
   const breakpoints = {
@@ -74,7 +74,16 @@ export default function Home() {
               fontFamily={"Syne, sans-serif"}
               fontWeight={"700"}
               lineHeight={"19px"}
-              onClick={logout}
+              onClick={() =>
+                logout(() => {
+                  toast({
+                    title: `Logged out successfully!`,
+                    status: "info",
+                    isClosable: true,
+                    duration: 2000,
+                  });
+                })
+              }
             >
               logout
             </Text>
@@ -130,7 +139,18 @@ export default function Home() {
               height={"51px"}
               borderRadius={"12px"}
               _hover={{ background: "#C297B8" }}
-              onClick={() => login(twitter, user, contextUser, setContextUser)}
+              onClick={() =>
+                login(twitter, user, contextUser, setContextUser, () => {
+                  router.push("/feed");
+                  console.log(contextUser, 233);
+                  toast({
+                    title: `Logged in successfully!`,
+                    status: "success",
+                    isClosable: true,
+                    duration: 2000,
+                  });
+                })
+              }
             >
               Connect with twitter
             </Button>

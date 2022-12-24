@@ -13,10 +13,27 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
+  Link,
+  Avatar,
   ModalBody,
   ModalCloseButton,
   Textarea,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  useToast,
 } from "@chakra-ui/react";
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+} from "@choc-ui/chakra-autocomplete";
 
 import {
   doc,
@@ -43,8 +60,16 @@ import { login, logout } from "../utils/authFunctions";
 
 const Navbar = () => {
   const [user, loading, error] = useAuthState(auth);
+  const toast = useToast();
 
-  const { contextUser, setContextUser } = useUserContext();
+  const {
+    contextUser,
+    setContextUser,
+    contextAllUsers,
+    setContextAllUsers,
+    contextReviews,
+    setContextReviews,
+  } = useUserContext();
 
   useEffect(() => {
     console.log("in navbar", user);
@@ -86,46 +111,103 @@ const Navbar = () => {
         </Text>
 
         {contextUser !== null && (
-          <InputGroup
-            display={{ base: "none", md: "flex" }}
-            width={{ base: "328px", md: "480px" }}
-            marginTop={"16px"}
-            height={"45px"}
-            borderRadius={"12px"}
-          >
-            <InputLeftElement pointerEvents="none">🔎</InputLeftElement>
-            <Input placeholder="Search users by their twitter handle" />
-          </InputGroup>
+          <AutoComplete openOnFocus>
+            <InputGroup
+              width={{ base: "328px", md: "480px" }}
+              marginTop={"16px"}
+              marginInline={"auto"}
+              height={"45px"}
+              borderRadius={"12px"}
+            >
+              <InputLeftElement pointerEvents="none">🔎</InputLeftElement>
+              <AutoCompleteInput placeholder="Search users by their twitter handle" />
+            </InputGroup>
+            <AutoCompleteList border={"1px solid white"} marginInline={"auto"}>
+              {console.log(contextAllUsers, "allusers")}
+              {contextAllUsers?.map((twitterUser, cid) => (
+                <Link key={cid} href={`/${twitterUser?.username}`}>
+                  <AutoCompleteItem
+                    key={`option-${cid}`}
+                    value={twitterUser.name}
+                    textTransform="capitalize"
+                  >
+                    {" "}
+                    <Avatar
+                      borderRadius={"50%"}
+                      loading="lazy"
+                      w="30px"
+                      h="30px"
+                      name={twitterUser.name}
+                      src={twitterUser.photoURL.replace("normal", "400x400")}
+                    />
+                    <Flex flexDir="column" justifyContent={"center"}>
+                      <Text ml="4" noOfLines={1}>
+                        @{twitterUser.username}
+                      </Text>
+                    </Flex>
+                  </AutoCompleteItem>
+                </Link>
+              ))}
+            </AutoCompleteList>
+          </AutoComplete>
         )}
 
         {contextUser && user && (
-          <Flex
-            key={contextUser.anonId}
-            background={"#17181C"}
-            height={"64px"}
-            borderRadius={"12px"}
-            align={"center"}
-          >
-            <Image
-              src={contextUser.photoURL}
-              alt={contextUser.name}
-              height={"60px"}
-              width={"60px"}
-              borderRadius={"50%"}
-              paddingLeft={"12px"}
-              paddingTop={"8px"}
-              paddingBottom={"8px"}
-            />
-            <Text
-              paddingLeft={"12px"}
-              color={"white"}
-              fontFamily={"DM Sans, sans-serif"}
-              fontWeight={"700"}
-              fontSize={"16px"}
-            >
-              @{contextUser.name}
-            </Text>
-          </Flex>
+          <Menu isLazy>
+            <MenuButton>
+              <Flex
+                key={contextUser.anonId}
+                background={"#17181C"}
+                height={"64px"}
+                borderRadius={"12px"}
+                align={"center"}
+              >
+                <Image
+                  src={contextUser.photoURL.replace("normal", "400x400")}
+                  alt={contextUser.name}
+                  height={"60px"}
+                  width={"60px"}
+                  borderRadius={"50%"}
+                  paddingLeft={"12px"}
+                  paddingTop={"8px"}
+                  paddingBottom={"8px"}
+                />
+                <Text
+                  paddingLeft={"12px"}
+                  color={"white"}
+                  fontFamily={"DM Sans, sans-serif"}
+                  fontWeight={"700"}
+                  fontSize={"16px"}
+                >
+                  @{contextUser.name}
+                </Text>
+              </Flex>
+            </MenuButton>
+            <MenuList>
+              {/* MenuItems are not rendered unless Menu is open */}
+              <MenuItem>
+                <Text
+                  onClick={() =>
+                    logout(() => {
+                      toast({
+                        title: `Logged out successfully!`,
+                        status: "info",
+                        isClosable: true,
+                        duration: 2000,
+                      });
+                    })
+                  }
+                  color={"white"}
+                  fontSize={{ base: "13px", md: "16px" }}
+                  fontFamily={"Syne, sans-serif"}
+                  fontWeight={"700"}
+                  lineHeight={"19px"}
+                >
+                  Logout
+                </Text>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         )}
 
         {!user && (
@@ -141,18 +223,9 @@ const Navbar = () => {
           </Text>
         )}
         {console.log(user, "user befor logout")}
-        {user && (
-          <Text
-            onClick={logout}
-            color={"white"}
-            fontSize={{ base: "13px", md: "16px" }}
-            fontFamily={"Syne, sans-serif"}
-            fontWeight={"700"}
-            lineHeight={"19px"}
-          >
-            Logout
-          </Text>
-        )}
+        {/* {user && (
+          
+        )} */}
       </Flex>
     </Flex>
   );
@@ -183,7 +256,7 @@ const Profile = () => {
   } = useUserContext();
 
   const userContext = useUserContext();
-
+  const toast = useToast();
   const dropTea = () => {
     alert("droppin tea");
     //check if user is there
@@ -227,17 +300,6 @@ const Profile = () => {
     <div className="main">
       <Flex flexDir={"column"} align={"center"}>
         <Navbar />
-
-        <InputGroup
-          display={{ md: "none", base: "flex" }}
-          width={{ base: "328px", md: "480px" }}
-          marginTop={"16px"}
-          height={"45px"}
-          borderRadius={"12px"}
-        >
-          <InputLeftElement pointerEvents="none">🔎</InputLeftElement>
-          <Input placeholder="Search users by their twitter handle" />
-        </InputGroup>
 
         <Flex marginTop={"34px"} gap={"24px"} flexDir={"column"}>
           <Flex
@@ -348,8 +410,21 @@ const Profile = () => {
                           borderRadius={"12px"}
                           _hover={{ background: "#C297B8" }}
                           onClick={() => {
-                            login(twitter, user, contextUser, setContextUser);
-                            onCloseLogin;
+                            login(
+                              twitter,
+                              user,
+                              contextUser,
+                              setContextUser,
+                              () => {
+                                toast({
+                                  title: `Logged in successfully!`,
+                                  status: "success",
+                                  isClosable: true,
+                                  duration: 2000,
+                                });
+                              }
+                            );
+                            onCloseLogin();
                           }}
                         >
                           Connect with twitter

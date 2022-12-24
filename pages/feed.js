@@ -164,7 +164,7 @@ const Mainapp = () => {
                         w="30px"
                         h="30px"
                         name={twitterUser.name}
-                        src={twitterUser.photoURL}
+                        src={twitterUser.photoURL.replace("normal", "400x400")}
                       />
                       <Flex flexDir="column" justifyContent={"center"}>
                         <Text ml="4" noOfLines={1}>
@@ -215,14 +215,13 @@ const Mainapp = () => {
                       align={"center"}
                     >
                       <Image
-                        src={userr.photoURL}
+                        maxW={"40px"}
+                        src={userr.photoURL.replace("normal", "400x400")}
                         alt={userr.name}
-                        height={"60px"}
-                        width={"60px"}
                         borderRadius={"50%"}
-                        paddingLeft={"12px"}
-                        paddingTop={"8px"}
-                        paddingBottom={"8px"}
+                        marginLeft={"12px"}
+                        marginTop={"8px"}
+                        marginBottom={"8px"}
                       />
                       <Text
                         paddingLeft={"12px"}

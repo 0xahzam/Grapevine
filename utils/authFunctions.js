@@ -4,10 +4,17 @@ import { SetUserInContext } from "../context/contextFunctions";
 
 import { auth, db } from "../firebase/clientApp";
 
-const login = async (provider, user, contextUser, setContextUser) => {
+const login = async (
+  provider,
+  user,
+  contextUser,
+  setContextUser,
+  onSuccess
+) => {
   console.log(1);
   if (user) {
     SetUserInContext(setContextUser, user, "username");
+    onSuccess();
     return;
   } else {
     const result = await signInWithPopup(auth, provider);
@@ -56,16 +63,15 @@ const login = async (provider, user, contextUser, setContextUser) => {
         console.log("Transaction failed: ", e);
       }
     }
-    // router.push("/feed");
-    console.log(contextUser, 23);
-    alert(`logged in ${contextUser?.name}`);
+    {
+      onSuccess && onSuccess();
+    }
   }
 };
-const logout = async () => {
-  alert("loggin out");
+const logout = async (onSuccess) => {
   const result = await signOut(auth);
   console.log(result, "logged out");
-  alert("logged out");
+  onSuccess();
 };
 
 export { login, logout };
